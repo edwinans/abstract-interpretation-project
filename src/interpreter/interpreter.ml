@@ -168,7 +168,7 @@ module Interprete(D : DOMAIN) =
        (* to be sound, we return the argument unchanged *)
        let f = filter a e true in
        if D.subset a f && D.subset f a then        
-       a else error ext "assertion failure"; f
+       a else (error ext "assertion failure"; f)
           
     | AST_print l ->
         (* print the current abstract environment *)
