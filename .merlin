@@ -1,0 +1,13 @@
+S src
+S src/domains
+S src/frontend
+S src/interpreter
+S src/libs
+S src/**
+
+
+B src/**
+B _build
+B _build/*
+B src
+B src/domains

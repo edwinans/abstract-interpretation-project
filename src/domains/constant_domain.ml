@@ -11,7 +11,7 @@
 open Abstract_syntax_tree
 open Value_domain
 
-  
+
 module Constants = (struct
 
   
@@ -74,7 +74,13 @@ module Constants = (struct
 
   let sub = lift2 Z.sub
 
-  let mul = lift2 Z.mul
+  (* let mul = lift2 Z.mul
+  *)
+
+  let mul a b = match a,b with 
+    | TOP, Cst x when x = Z.zero -> Cst Z.zero 
+    | Cst x, TOP when x = Z.zero -> Cst Z.zero 
+    | _ -> lift2 Z.mul a b
 
   let div a b =
     if b = Cst Z.zero then BOT
@@ -100,18 +106,33 @@ module Constants = (struct
 
   (* comparison operations (filters) *)
 
-  let eq a b =
-    (* this is not very precise, how can we improve it ? *)
-    a, b
+  let eq a b = match a,b with 
+  | TOP, TOP -> TOP, TOP
+  | TOP, Cst _ -> b, b 
+  | Cst _, TOP -> a, a
+  | Cst c1, Cst c2 when Z.compare c1 c2 = 0 -> a, b 
+  | _, _ -> BOT, BOT
 
-  let neq a b =
-    a, b
+  let neq a b = a, b
+    (* match a,b with 
+  | TOP, TOP -> BOT, BOT
+  | TOP, _ -> TOP, BOT 
+  | _, TOP -> BOT, TOP 
+  | Cst c1, Cst c2 when Z.compare c1 c2 != 0 -> a, b 
+  | _ , BOT -> a, BOT 
+  | BOT, _ -> BOT, b *)
 
-  let geq a b =
-    a, b
+  let geq a b = match a,b with 
+  | TOP, _ -> TOP, b 
+  | Cst c1, Cst c2 when Z.compare c1 c2 >=0 -> a, b 
+  | _, _ -> BOT, BOT
 
-  let gt a b =
-    a, b
+  let gt a b =  a,b
+    (* match a, b with
+  | TOP, TOP -> BOT, BOT
+  | TOP, _ -> TOP, b 
+  | Cst c1, Cst c2 when Z.compare c1 c2 > 0 -> a, b 
+  | _, _ -> BOT, BOT *)
 
 
   (* subset inclusion of concretizations *)
