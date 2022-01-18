@@ -113,26 +113,22 @@ module Constants = (struct
   | Cst c1, Cst c2 when Z.compare c1 c2 = 0 -> a, b 
   | _, _ -> BOT, BOT
 
-  let neq a b = a, b
-    (* match a,b with 
-  | TOP, TOP -> BOT, BOT
-  | TOP, _ -> TOP, BOT 
-  | _, TOP -> BOT, TOP 
+  let neq a b = match a,b with 
+  | TOP, _ | _, TOP -> a, b 
   | Cst c1, Cst c2 when Z.compare c1 c2 != 0 -> a, b 
-  | _ , BOT -> a, BOT 
-  | BOT, _ -> BOT, b *)
+  | _, _ -> BOT, BOT
+  
+  let gt a b = match a, b with
+  | TOP, _ | _, TOP -> a, b
+  | Cst c1, Cst c2 when Z.compare c1 c2 > 0 -> a, b 
+  | _, _ -> BOT, BOT
 
   let geq a b = match a,b with 
   | TOP, _ -> TOP, b 
-  | Cst c1, Cst c2 when Z.compare c1 c2 >=0 -> a, b 
+  | Cst c1, Cst c2 when Z.compare c1 c2 >= 0 -> a, b 
+  | Cst _, TOP -> a, a
   | _, _ -> BOT, BOT
 
-  let gt a b =  a,b
-    (* match a, b with
-  | TOP, TOP -> BOT, BOT
-  | TOP, _ -> TOP, b 
-  | Cst c1, Cst c2 when Z.compare c1 c2 > 0 -> a, b 
-  | _, _ -> BOT, BOT *)
 
 
   (* subset inclusion of concretizations *)

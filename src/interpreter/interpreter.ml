@@ -166,10 +166,10 @@ module Interprete(D : DOMAIN) =
 
     | AST_assert e ->
        (* to be sound, we return the argument unchanged *)
-       let f = filter a e true in
-       if D.subset a f && D.subset f a then        
-       a else (error ext "assertion failure"; f)
-          
+       let f1 = filter a e false and f2 = filter a e true in
+       if D.is_bottom f1 then        
+        f2 else (error ext "assertion failure"; f2)
+
     | AST_print l ->
         (* print the current abstract environment *)
         let l' = List.map fst l in
