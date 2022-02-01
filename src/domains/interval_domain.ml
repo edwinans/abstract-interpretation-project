@@ -101,6 +101,12 @@ module Intervals : VALUE_DOMAIN = struct
     | PInf, _ | _, PInf -> PInf 
     | Val v1, Val v2 -> Val (Z.max v1 v2)
 
+  (* comparison for values *)
+  let gt_value x y = match x,y with
+   | NInf, _ | _, PInf -> false
+   | PInf, _ | _, NInf -> true 
+   | Val v1, Val v2 -> Z.gt v1 v2
+
   (* ordering for intervals*)
   let is_val itvl v = (itvl = Interval (v, v))
   let is_int itvl c = (itvl = const c)
@@ -166,6 +172,7 @@ module Intervals : VALUE_DOMAIN = struct
   (* no need for a widening as the domain has finite height; we use the join *)
   let widen = join
 
+
   (* comparison operations (filters) *)
 
   let eq x y =
@@ -184,7 +191,20 @@ module Intervals : VALUE_DOMAIN = struct
         let x', y' = neq y x in (y', x')
     | _, _ -> x,y  
 
-  let gt a b = a,b
+  let gt x y = match x,y with
+    | BOT, _ | _, BOT -> BOT, BOT
+    | Interval (a1,_) , Interval (a2,_) when (is_val x a1) && (is_val y a2) ->
+        if gt_value a2 a1 then BOT, BOT else x, y
+    | Interval (a1,b1) , Interval (a2,b2) -> 
+      let t1 = Interval (max_value (increment_value a2) a1, b1) in 
+      let t2 = Interval (a2, min_value (decrement_value b1) b2) in
+      if gt_value a2 b1 then BOT, BOT
+      else if gt_value a1 b2 then x, y
+      else (
+        if is_val x a1 then x,t2
+        else if is_val y a2 then t1,y 
+        else t1,t2
+      )
 
   let geq a b = a,b
 
