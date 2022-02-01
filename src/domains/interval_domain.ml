@@ -194,7 +194,7 @@ module Intervals : VALUE_DOMAIN = struct
   let gt x y = match x,y with
     | BOT, _ | _, BOT -> BOT, BOT
     | Interval (a1,_) , Interval (a2,_) when (is_val x a1) && (is_val y a2) ->
-        if gt_value a2 a1 then BOT, BOT else x, y
+        if not (gt_value a2 a1) then x,y else BOT, BOT
     | Interval (a1,b1) , Interval (a2,b2) -> 
       let t1 = Interval (max_value (increment_value a2) a1, b1) in 
       let t2 = Interval (a2, min_value (decrement_value b1) b2) in
@@ -206,8 +206,20 @@ module Intervals : VALUE_DOMAIN = struct
         else t1,t2
       )
 
-  let geq a b = a,b
-
+  let geq x y = match x,y with
+    | BOT, _ | _, BOT -> BOT, BOT
+    | Interval (a1,_) , Interval (a2,_) when (is_val x a1) && (is_val y a2) ->
+        if gt_value a2 a1 then BOT, BOT else x,y
+    | Interval (a1,b1) , Interval (a2,b2) -> 
+      let t1 = Interval (max_value a2 a1, b1) in 
+      let t2 = Interval (a2, min_value b1 b2) in
+      if gt_value a2 b1 then BOT, BOT
+      else if gt_value a1 b2 || a1 = b2 then x, y
+      else (
+        if is_val x a1 then x,t2
+        else if is_val y a2 then t1,y 
+        else t1,t2
+      )
   (* subset inclusion of concretizations *)
   let subset a b = true
 
