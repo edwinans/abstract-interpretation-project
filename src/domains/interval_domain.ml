@@ -78,6 +78,15 @@ module Intervals : VALUE_DOMAIN = struct
         PInf
     | Val v1, Val v2 -> Val (Z.mul v1 v2)
 
+    let div_value x y = match x,y with 
+    | _, _ when y = Val Z.zero -> failwith "division by zero"
+    | NInf, PInf | PInf, NInf -> NInf
+    | NInf, NInf | PInf, PInf -> PInf 
+    | NInf, Val v -> if Z.lt v Z.zero then PInf else NInf
+    | PInf, Val v -> if Z.lt v Z.zero then NInf else PInf
+    | Val v, NInf | Val v, PInf -> Val Z.zero
+    | Val v1, Val v2 -> Val (Z.div v1 v2)
+
   let increment_value x = add_value x (Val (Z.one))
   let decrement_value x = sub_value x (Val (Z.one))
 
@@ -122,7 +131,24 @@ module Intervals : VALUE_DOMAIN = struct
 
   (* let div a b = if b = Cst Z.zero then BOT else lift2 Z.div a b *)
 
-  let div x y = if is_int y Z.zero then BOT else x
+  let remove_zero = function
+    | Interval (a,b) when a = Val (Z.zero) -> Interval(increment_value a, b)
+    | Interval (a,b) when b = Val (Z.zero) -> Interval(a, decrement_value b)
+    | x -> x 
+
+
+  let div x y = match x,y with 
+    | BOT, _ | _, BOT -> BOT
+    | _, _ when is_int y Z.zero  -> BOT 
+    | Interval (a1,b1), _ -> match remove_zero y with
+      | Interval(a2,b2) ->( 
+        let t1 = div_value a1 a2 and t2 = div_value a1 b2 
+        and t3 = div_value b1 a2 and t4 = div_value b1 b2 in 
+        let a = min_value (min_value t1 t2) (min_value t3 t4)
+        and b = max_value (max_value t1 t2) (max_value t3 t4) in 
+        Interval (a, b))
+      | _ -> BOT
+      
 
   (* set-theoretic operations *)
 
