@@ -152,7 +152,7 @@ module Interprete(D : DOMAIN) =
         let rec fix (f:t -> t) (x:t) : t = 
           let fx = f x in
           if D.subset fx x then fx
-          else fix f fx
+          else fix f (D.widen x fx)
         in
         (* function to accumulate one more loop iteration:
            F(X(n+1)) = X(0) U body(F(X(n))

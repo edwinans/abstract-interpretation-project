@@ -107,6 +107,9 @@ module Intervals : VALUE_DOMAIN = struct
    | PInf, _ | _, NInf -> true 
    | Val v1, Val v2 -> Z.gt v1 v2
 
+  let ge_value x y = not (gt_value y x)
+
+   
   (* ordering for intervals*)
   let is_val itvl v = (itvl = Interval (v, v))
   let is_int itvl c = (itvl = const c)
@@ -159,18 +162,22 @@ module Intervals : VALUE_DOMAIN = struct
   (* set-theoretic operations *)
 
   let join x y = match x,y with 
-      | BOT, _ | _, BOT -> BOT 
-      | Interval (a1, b1), Interval (a2, b2) ->
-          Interval (min_value a1 a2, max_value b1 b2)
+    | BOT, _ | _, BOT -> BOT 
+    | Interval (a1, b1), Interval (a2, b2) ->
+        Interval (min_value a1 a2, max_value b1 b2)
 
   let meet x y =  match x,y with 
-  | BOT, _ | _, BOT -> BOT 
-  | Interval (a1, b1), Interval (a2, b2) ->
-      if a2 > b1 || a1 > b2 then BOT 
-      else Interval (max_value a1 a2, min_value b1 b2)
+    | BOT, _ | _, BOT -> BOT 
+    | Interval (a1, b1), Interval (a2, b2) ->
+        if gt_value a2 b1 || gt_value a1 b2 then BOT 
+        else Interval (max_value a1 a2, min_value b1 b2)
 
-  (* no need for a widening as the domain has finite height; we use the join *)
-  let widen = join
+  let widen x y = match x,y with
+    | BOT, _ -> y 
+    | _, BOT -> x
+    | Interval (a, b), Interval (c, d) ->
+      let a' = if ge_value c a then a else NInf in
+      let b' = if ge_value b d then b else PInf in Interval(a',b')
 
 
   (* comparison operations (filters) *)
@@ -194,7 +201,7 @@ module Intervals : VALUE_DOMAIN = struct
   let gt x y = match x,y with
     | BOT, _ | _, BOT -> BOT, BOT
     | Interval (a1,_) , Interval (a2,_) when (is_val x a1) && (is_val y a2) ->
-        if not (gt_value a2 a1) then x,y else BOT, BOT
+        if gt_value a1 a2 then x,y else BOT, BOT
     | Interval (a1,b1) , Interval (a2,b2) -> 
       let t1 = Interval (max_value (increment_value a2) a1, b1) in 
       let t2 = Interval (a2, min_value (decrement_value b1) b2) in
@@ -221,7 +228,11 @@ module Intervals : VALUE_DOMAIN = struct
         else t1,t2
       )
   (* subset inclusion of concretizations *)
-  let subset a b = true
+  let subset a b = match a,b with
+    | BOT, _ -> true
+    | _, BOT -> false
+    | Interval (a1,b1) , Interval (a2,b2) -> 
+     ge_value a1 a2 && ge_value b2 b1
 
   (* check the emptiness of the concretization *)
   let is_bottom = (=) BOT
@@ -232,7 +243,7 @@ module Intervals : VALUE_DOMAIN = struct
 
   let val_to_string = function
   | Val x -> Z.to_string x
-  | NInf -> "−∞"
+  | NInf -> "-∞"
   | PInf -> "+∞"
 
   (* print abstract element *)
@@ -240,8 +251,6 @@ module Intervals : VALUE_DOMAIN = struct
     match x with
     | BOT ->
         Format.fprintf fmt "⊥"
-    | _ when is_top x ->
-        Format.fprintf fmt "⊤"
     | Interval (a,b) ->
         Format.fprintf fmt "[%s;%s]" (val_to_string a) (val_to_string b)
 
