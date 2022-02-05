@@ -23,6 +23,8 @@ open Domain
 (* for debugging *)
 let trace = ref false
 
+(* used for lazy widening *)
+let widening_delay = ref 0
 
 
 (* utilities *)
@@ -149,10 +151,10 @@ module Interprete(D : DOMAIN) =
           
     | AST_while (e,s) ->
         (* simple fixpoint *)
-        let rec fix (f:t -> t) (x:t) : t = 
+        let rec fix (f:t -> t) (x:t) (n:int): t = 
           let fx = f x in
-          if D.subset fx x then fx
-          else fix f (D.widen x fx)
+          if D.subset fx x then fx 
+          else if n = 0 then fix f (D.widen x fx) 0 else fix f fx (n-1)
         in
         (* function to accumulate one more loop iteration:
            F(X(n+1)) = X(0) U body(F(X(n))
@@ -160,7 +162,7 @@ module Interprete(D : DOMAIN) =
          *)        
         let f x = D.join a (eval_stat (filter x e true) s) in
         (* compute fixpoint from the initial state (i.e., a loop invariant) *)
-        let inv = fix f a in
+        let inv = fix f a !widening_delay in
         (* and then filter by exit condition *)
         filter inv e false
 
