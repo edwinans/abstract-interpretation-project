@@ -17,6 +17,19 @@ module IntervalAnalysis =
   Interpreter.Interprete
     (Non_relational_domain.NonRelational
       (Interval_domain.Intervals))
+
+module ParityAnalysis =
+  Interpreter.Interprete
+    (Non_relational_domain.NonRelational
+      (Parity_domain.Parity))
+
+module ParityIntervalAnalysis =
+  Interpreter.Interprete
+    (Non_relational_domain.NonRelational
+      (Value_reduced_product.ReducedProduct(
+        Parity_interval_reduction.ParityIntervalsReduction
+      )))
+
     
 (* parse and print filename *)
 let doit filename =
@@ -54,13 +67,24 @@ let main () =
      "-interval",
      Arg.Unit (fun () -> action := IntervalAnalysis.eval_prog),
      "Use the interval abstract domain";
+
+     "-parity",
+     Arg.Unit (fun () -> action := ParityAnalysis.eval_prog),
+     "Use the parity abstract domain";
     
      "-delay",
      Arg.Set_int Interpreter.widening_delay,
-     "Use with the -interval option for a lazy widening (the default is 0)"
+     "Use with the -interval option for a lazy widening (the default is 0)";
+
+     "-unroll",
+     Arg.Set_int Interpreter.unroll,
+     "Use with the -interval option for an unroll (the default is 0)";
+
+     "-parity-interval",
+     Arg.Unit (fun () -> action := ParityIntervalAnalysis.eval_prog),
+     "Use the parity-interval abstract domain"
 
      (* options to add *)
-     (* -unroll *)
      (* -parity-interval *)
 
     ]

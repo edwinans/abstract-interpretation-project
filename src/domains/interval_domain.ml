@@ -3,14 +3,13 @@
  *)
 
 open Abstract_syntax_tree
-open Value_domain
 
-module Intervals : VALUE_DOMAIN = struct
+module Intervals = (struct
   (* types *)
   (* ***** *)
-
+  include Value_domain
   (* type of abstract values *)
-
+  
   type value = Val of Z.t | NInf | PInf
 
   type t =
@@ -310,4 +309,4 @@ module Intervals : VALUE_DOMAIN = struct
     | AST_DIVIDE ->
         (* this is sound, but not precise *)
         (x, y)
-end
+end)
