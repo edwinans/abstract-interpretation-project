@@ -20,8 +20,8 @@ struct
     match i with
     | BOT -> bottom
     | Interval (a, b) ->
-        let a' = if parity a = p then B.increment_value a else a in
-        let b' = if parity b = p then B.decrement_value b else b in
+        let a' = if A.subset (parity a) p then a else B.increment_value a in
+        let b' = if A.subset (parity b) p then b else B.decrement_value b in
         if B.gt_value a' b' then bottom
         else if a' = b' then (parity a', Interval (a', b'))
         else (p, Interval (a', b'))
