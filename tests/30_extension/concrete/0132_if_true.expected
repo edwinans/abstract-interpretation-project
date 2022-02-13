@@ -1,0 +1,2 @@
+tests/30_extension/concrete/0132_if_true.c:5.2-11: { [x=1;]; }
+analysis ended

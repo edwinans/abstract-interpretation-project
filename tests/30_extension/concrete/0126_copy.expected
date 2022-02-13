@@ -1,0 +1,2 @@
+tests/30_extension/concrete/0126_copy.c:7.4-13: { [y=12;]; }
+analysis ended

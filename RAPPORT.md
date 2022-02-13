@@ -47,7 +47,7 @@ e.x. Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
 ### 2.1 Domaine des intervalles
 - [x] [domains/interval_domain.ml](src/domains/domain.ml)
 - [x] [main.ml](src/main.ml): IntervalAnalysis, `-interval` option
-- [x] [tests/10_interval](test/10_interval/)
+- [x] [tests/10_interval](tests/10_interval/)
 
 ### 2.2 Analyse des boucles
 - [x] [domains/interval_domain.ml](src/domains/interval_domain.ml): widen
@@ -72,3 +72,4 @@ e.x. Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
 - [x] [domains/z32](src/domains/z32.ml): support basé sur `Int32` pour l'arithmétique modulaire sur 32 bits
 - [x] [domains/concrete_domain.ml](src/domains/concrete_domain.ml): paramétré par un module `Z` arbitraire avec la même signature que `zarith`
 - [x] [main.ml](src/main.ml): option `concrete-int32` pour l'arithmétique sur 32 bits
+- [x] [tests/30_extension/concrete/](tests/30_extension/concrete/): implementation cohérent avec anciens tests

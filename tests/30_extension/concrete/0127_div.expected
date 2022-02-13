@@ -1,0 +1,2 @@
+tests/30_extension/concrete/0127_div.c:4.2-11: { [x=5;]; }
+analysis ended

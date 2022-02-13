@@ -1,0 +1,2 @@
+tests/30_extension/concrete/0119_assign.c:6.2-11: { [y=17;]; }
+analysis ended
