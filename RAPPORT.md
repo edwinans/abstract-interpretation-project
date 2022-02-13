@@ -46,3 +46,26 @@ e.x. Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
 ## 2. partie commune
 
 ### 2.1 Domaine des intervalles
+- [x] domains/interval_domain.ml
+- [x] main.ml: IntervalAnalysis, `-interval` option
+- [x] tests/10_interval
+
+### 2.2 Analyse des boucles
+- [x] domains/interval_domain.ml: widen
+- [x] interpreter/interpreter.ml: line 154
+- [x] tests/12_interval_loop/
+- [x] main.ml: -delay n option
+- [x] tests/13_interval_loop_delay/
+- [x] main.ml: -unroll u option
+- [ ] tests/14_interval_loop_delay_unroll/ 
+  - seulement 2 tests ne passe pas:
+    `0207_loop_nested.c` et `0208_loop_nested.c`
+
+### 2.3 Produit réduit
+- [x] domains/value_reduction.ml: signature des réductions
+- [x] domains/value_reduced_product.ml: produit réduit générique
+- [x] domains/parity_interval_reduction.ml: instance de réduction
+- [x] main.ml: -parity-interval option
+- [x] tests/20_reduced/
+
+## 3. Extension au choix: **Analyse disjonctive**
