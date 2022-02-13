@@ -4,9 +4,13 @@
   Antoine Miné 2015-2018
 *)
 
+open Z32 
 
 module ConcreteAnalysis =
-  Interpreter.Interprete(Concrete_domain.Concrete)
+  Interpreter.Interprete(Concrete_domain.Concrete(Z))
+
+module ConcreteAnalysisInt32 =
+  Interpreter.Interprete(Concrete_domain.Concrete(Z32))
     
 module ConstantAnalysis =
   Interpreter.Interprete
@@ -59,6 +63,10 @@ let main () =
      "-concrete",
      Arg.Unit (fun () -> action := ConcreteAnalysis.eval_prog),
      "Use the concrete domain";
+
+     "-concrete-int32",
+     Arg.Unit (fun () -> action := ConcreteAnalysisInt32.eval_prog),
+     "Use the concrete domain with int32";
 
      "-constant",
      Arg.Unit (fun () -> action := ConstantAnalysis.eval_prog),

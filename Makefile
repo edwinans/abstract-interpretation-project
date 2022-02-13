@@ -74,6 +74,8 @@ MLFILES = \
   $(SRC)/frontend/parser.ml \
   $(SRC)/frontend/lexer.ml \
   $(SRC)/frontend/file_parser.ml \
+  $(SRC)/domains/z32.ml \
+  $(SRC)/domains/z_type.ml \
   $(SRC)/domains/domain.ml \
   $(SRC)/domains/value_domain.ml \
   $(SRC)/domains/concrete_domain.ml \

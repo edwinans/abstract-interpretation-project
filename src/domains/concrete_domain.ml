@@ -8,11 +8,12 @@
    Concrete execution domain
  *)
   
-open Abstract_syntax_tree
-open Value_domain
-open Domain
-
-module Concrete = (struct
+ open Abstract_syntax_tree
+ open Value_domain
+ open Domain
+ open Z_type
+ 
+module Concrete (Z:Z_TYPE)= (struct
 
   (* types *)
   (* ***** *)
