@@ -1,10 +1,48 @@
 # Projet d'analyseur statique du cours TAS - Rapport de projet
+Auteur: Edwin ANSARI - 28708326
 
-*À compléter.*
+**Tout les fonctionnalités sont implémentées.**
+
+Problèmes rencontrées: 
+- Quelques étudiants (y compris moi) non pas réussi a `build/make` le projet pour un certain moment à cause d'un problème avec `menhir`. j'ai donc réglé et détaillé le problème dans un [issue#1](https://stl.algo-prog.info/tas-2021oct/projet-tas/-/issues/1).
 
 ## 1. Prise en main
 
-### 1.3 Complétion du domaine des constantes
-#### constant_domain
-- Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
+### 1.1 Analyse concrète
+<details>
 
+> 1.1.1 Quelles est la sémantique de l'instruction rand(l,h) dans un programme ? quel est le résultat attendu de l'interprète?
+
+`rand` est utilisé pour représenter un bou de code/fonction complexe ou avec résultat imprévisible par example un `input`. Donc on suppose une intervalle `[l,h]` de valeurs possible.  
+Dans le cas de l'interpréteur *`concret`* on attend que l'analyse induit les résultats pour tout execution possible du programme donc pour une variable à valeurs dans `[l,h]` on aura `(h-l+1)` valeurs possible.
+
+> 1.1.2. Sous quelles conditions l'exécution d'un programme s'arrête-t-elle ? quel est alors le résultat
+de l'interprète ?
+
+Dans le cas d'un `assert false` ou bien la fin d'un programme avec instruction `halt` => environnement vide.
+
+> 1.1.3. Si le programme comporte une boucle infinie, est-il possible que l'interprète termine tout de même ? dans quels cas ?
+
+Oui dans le cas ou l'interpréteur utilise `join` ou `widen` pour accélérer la convergence de l'environnement d'une boucle et de trouver un `fixpoint`.
+</details>
+
+### 1.2 Ajout du support des assertions
+interpreter.ml
+```ml
+| AST_assert e ->
+    (* to be sound, we return the argument unchanged *)
+    let f1 = filter a e false and f2 = filter a e true in
+    if D.is_bottom f1 then        
+    f2 else (error ext "assertion failure"; f2)
+```
+`f2` : le résultat en supposant que l'assert est correcte est renvoyé dans les deux cas.
+
+### 1.3 Complétion du domaine des constantes
+<span style="color:blue"> constant_domain.ml </span>:  
+e.x. Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
+- [x] mul
+- [x] eq, neq, gt, ge
+
+## 2. partie commune
+
+### 2.1 Domaine des intervalles

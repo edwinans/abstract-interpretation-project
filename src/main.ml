@@ -83,10 +83,6 @@ let main () =
      "-parity-interval",
      Arg.Unit (fun () -> action := ParityIntervalAnalysis.eval_prog),
      "Use the parity-interval abstract domain"
-
-     (* options to add *)
-     (* -parity-interval *)
-
     ]
     (* handle filenames *)
     (fun filename -> files := (!files)@[filename])
