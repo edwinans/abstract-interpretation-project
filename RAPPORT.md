@@ -70,6 +70,6 @@ e.x. Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
 
 ## 3. Extension au choix: **Analyse des entiers machine modulaires**
 - [x] domains/z_type: ajout du signature de `zarith.Z`
-- [x] domains/z32: support base sur `Int32` pour l'arithmétique modulaire sur 32 bits
-- [x] domains/concrete_domain.ml: paramétré par un module `Z` arbitraire avec la meme signature que `zarith`
+- [x] domains/z32: support basé sur `Int32` pour l'arithmétique modulaire sur 32 bits
+- [x] domains/concrete_domain.ml: paramétré par un module `Z` arbitraire avec la même signature que `zarith`
 - [x] main.ml: option `concrete-int32` pour l'arithmétique sur 32 bits
