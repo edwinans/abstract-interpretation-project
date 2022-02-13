@@ -9,7 +9,6 @@ Problèmes rencontrées:
 ## 1. Prise en main
 
 ### 1.1 Analyse concrète
-<details>
 
 > 1.1.1 Quelles est la sémantique de l'instruction rand(l,h) dans un programme ? quel est le résultat attendu de l'interprète?
 
@@ -24,7 +23,7 @@ Dans le cas d'un `assert false` ou bien la fin d'un programme avec instruction `
 > 1.1.3. Si le programme comporte une boucle infinie, est-il possible que l'interprète termine tout de même ? dans quels cas ?
 
 Oui dans le cas ou l'interpréteur utilise `join` ou `widen` pour accélérer la convergence de l'environnement d'une boucle et de trouver un `fixpoint`.
-</details>
+
 
 ### 1.2 Ajout du support des assertions
 interpreter.ml
