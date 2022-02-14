@@ -1,0 +1,2 @@
+tests/30_extension/concrete_int32/0301_add_overflow.c:7.2-11: { [x=-2147483638;]; }
+analysis ended

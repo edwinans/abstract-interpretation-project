@@ -72,4 +72,6 @@ e.x. Testing 0124_mul_rand.c: imprecision pour mul, TOP * {0} = {0}
 - [x] [domains/z32](src/domains/z32.ml): support basé sur `Int32` pour l'arithmétique modulaire sur 32 bits
 - [x] [domains/concrete_domain.ml](src/domains/concrete_domain.ml): paramétré par un module `Z` arbitraire avec la même signature que `zarith`
 - [x] [main.ml](src/main.ml): option `concrete-int32` pour l'arithmétique sur 32 bits
-- [x] [tests/30_extension/concrete/](tests/30_extension/concrete/): implementation cohérent avec anciens tests
+- [x] [tests/30_extension/concrete/](tests/30_extension/concrete/): test la coherence avec l'ancienne version
+- [x] [tests/30_extension/concrete_int32](tests/30_extension/concrete_int32/): tests pour illustrer la difference de comportement
+- pour d'autres domaine (constant, interval, parity) il suffit de paramétrer `Z` par `Z32` partout
