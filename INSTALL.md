@@ -70,7 +70,8 @@ sudo apt-get update
 sudo apt-get install -y build-essential opam libgmp-dev libmpfr-dev git
 opam init -y
 eval $(opam env)
-opam install -y menhir zarith mlgmpidl apron
+opam install -y menhir.20201216
+opam install -y zarith mlgmpidl apron
 ```
 Si une des commandes `opam` échoue, essayez de supprimer le répertoire `.opam` et de recommencer en utilisant `opam init -y --disable-sandboxing` au lieu de `opam init -y`.
 
