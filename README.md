@@ -21,3 +21,6 @@ Commencez par suivre les instructions d'installation décrites dans le fichier [
 Le fichier [TRAVAIL.md](TRAVAIL.md) détaille le travail demandé pour le projet.
 
 Les sources fournies sont documentées dans le fichier [DOC.md](DOC.md).
+
+# English installation
+- [INSTALL_EN.md](INSTALL_EN.md) (translated by Google Translate)
